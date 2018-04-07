@@ -10,14 +10,14 @@ Each Docker image is installed with the following components:
 * Browsers:
   * Mozilla Firefox
   * Chromium
-  
+
 ![Docker VNC Desktop access via HTML page](.pics/vnc_container_view.png)
 
 ## Build Status
 `master`:  [![Build Status MASTER](https://travis-ci.org/ConSol/docker-headless-vnc-container.svg?branch=master)](https://travis-ci.org/ConSol/docker-headless-vnc-container) `dev`: [![Build Status DEV](https://travis-ci.org/ConSol/docker-headless-vnc-container.svg?branch=dev)](https://travis-ci.org/ConSol/docker-headless-vnc-container)
 
 ## Current provided OS & UI sessions:
-* `consol/centos-xfce-vnc`: __Centos7 with `Xfce4` UI session__ 
+* `consol/centos-xfce-vnc`: __Centos7 with `Xfce4` UI session__
 
   [![](https://images.microbadger.com/badges/version/consol/centos-xfce-vnc.svg)](https://hub.docker.com/r/consol/centos-xfce-vnc/) [![](https://images.microbadger.com/badges/image/consol/centos-xfce-vnc.svg)](http://microbadger.com/images/consol/centos-xfce-vnc)
 
@@ -25,7 +25,7 @@ Each Docker image is installed with the following components:
 
   [![](https://images.microbadger.com/badges/version/consol/ubuntu-xfce-vnc.svg)](https://hub.docker.com/r/consol/ubuntu-xfce-vnc/) [![](https://images.microbadger.com/badges/image/consol/ubuntu-xfce-vnc.svg)](http://microbadger.com/images/consol/ubuntu-xfce-vnc)
 
-* `consol/centos-icewm-vnc`: __Centos7 with `IceWM` UI session__ 
+* `consol/centos-icewm-vnc`: __Centos7 with `IceWM` UI session__
 
   [![](https://images.microbadger.com/badges/version/consol/centos-icewm-vnc.svg)](https://hub.docker.com/r/consol/centos-icewm-vnc/) [![](https://images.microbadger.com/badges/image/consol/centos-icewm-vnc.svg)](http://microbadger.com/images/consol/centos-icewm-vnc)
 
@@ -38,24 +38,24 @@ Each Docker image is installed with the following components:
 It's also possible to run the images in container orchestration platforms like [Kubernetes](https://kubernetes.io) or [OpenShift](https://openshift.io/). For more information how to deploy containers in the cluster, take a look at:
 
 * [Kubernetes usage of "headless" VNC Docker images](./kubernetes/README.md)
-* [OpenShift usage of "headless" VNC Docker images](./openshift/README.md) 
+* [OpenShift usage of "headless" VNC Docker images](./openshift/README.md)
 
 ## Usage
 The usage is for all provide images **similar**, for instance see following the usage of the `consol/centos-xfce-vnc` image:
 
 Print out help page:
 
-    docker run consol/centos-xfce-vnc --help    
+    docker run consol/centos-xfce-vnc --help
 
 Run command with mapping to local port `5901` (vnc protocol) and `6901` (vnc web access):
 
     docker run -d -p 5901:5901 -p 6901:6901 consol/centos-xfce-vnc
-  
+
 Change the default user and group within a container to your own with adding `--user $(id -u):$(id -g)`:
 
     docker run -d -p 5901:5901 -p 6901:6901 --user $(id -u):$(id -g) consol/centos-xfce-vnc
 
-If you want to get into the container use interactive mode `-it` and `bash`     
+If you want to get into the container use interactive mode `-it` and `bash`
 
     docker run -it -p 5901:5901 -p 6901:6901 consol/centos-xfce-vnc bash
 
@@ -67,8 +67,8 @@ Build an image from scratch:
 If the container is started like mentioned above, connect via one of these options:
 
 * connect via __VNC viewer `localhost:5901`__, default password: `vncpassword`
-* connect via __noVNC HTML5 full client__: [http://localhost:6901/vnc.html](), default password: `vncpassword` 
-* connect via __noVNC HTML5 lite client__: [http://localhost:6901/?password=vncpassword]() 
+* connect via __noVNC HTML5 full client__: [http://localhost:6901/vnc.html](), default password: `vncpassword`
+* connect via __noVNC HTML5 lite client__: [http://localhost:6901/?password=vncpassword]()
 
 
 ## Hints
@@ -91,7 +91,7 @@ USER 1000
 
 ### 2) Change User of running Sakuli Container
 
-Per default, since version `1.3.0` all container processes will executed with user id `1000`. You can change the user id like follow: 
+Per default, since version `1.3.0` all container processes will executed with user id `1000`. You can change the user id like follow:
 
 #### 2.1) Using root (user id `0`)
 Add the `--user` flag to your docker run command:
@@ -106,7 +106,7 @@ Add the `--user` flag to your docker run command:
 ### 3) Override VNC environment variables
 The following VNC environment variables can be overwritten at the `docker run` phase to customize your desktop environment inside the container:
 * `VNC_COL_DEPTH`, default: `24`
-* `VNC_RESOLUTION`, default: `1280x1024`
+* `VNC_RESOLUTION`, default: `1440x900`
 * `VNC_PW`, default: `my-pw`
 
 #### 3.1) Example: Override the VNC password
@@ -120,7 +120,7 @@ Simply overwrite the value of the environment variable `VNC_RESOLUTION`. For exa
 the docker run command:
 
     docker run -it -p 5901:5901 -p 6901:6901 -e VNC_RESOLUTION=800x600 consol/centos-xfce-vnc
-    
+
 ### 4) View only VNC
 Since version `1.2.0` it's possible to prevent unwanted control over VNC. Therefore you can set the environment variable `VNC_VIEW_ONLY=true`. If set the docker startup script will create a random cryptic password for the control connection and use the value of `VNC_PW` for the view only connection over the VNC connection.
 
@@ -132,8 +132,8 @@ Since version `1.2.0` it's possible to prevent unwanted control over VNC. Theref
 If you open some graphic/work intensive websites in the Docker container (especially with high resolutions e.g. `1920x1080`) it can happen that Chromium crashes without any specific reason. The problem there is the too small `/dev/shm` size in the container. Currently there is no other way, as define this size on startup via `--shm-size` option, see [#53 - Solution](https://github.com/ConSol/docker-headless-vnc-container/issues/53#issuecomment-347265977):
 
     docker run --shm-size=256m -it -p 6901:6901 -e VNC_RESOLUTION=1920x1080 consol/centos-xfce-vnc chromium-browser http://map.norsecorp.com/
-  
-Thx @raghavkarol for the hint! 
+
+Thx @raghavkarol for the hint!
 
 ## Contributors
 
@@ -142,7 +142,7 @@ At this point we want to thank all contributors, which helped to move this great
 * [Tobias Schneck](https://github.com/toschneck) - Lead Development
 * [Robert Bohne](https://github.com/rbo) - IceWM Images
 * [hsiaoyi0504](https://github.com/hsiaoyi0504) - PR [#66](https://github.com/ConSol/docker-headless-vnc-container/pull/66)
-* [dmhumph](https://github.com/dmhumph) - PR [#44](https://github.com/ConSol/docker-headless-vnc-container/issue/44) 
+* [dmhumph](https://github.com/dmhumph) - PR [#44](https://github.com/ConSol/docker-headless-vnc-container/issue/44)
 
 ## Changelog
 
